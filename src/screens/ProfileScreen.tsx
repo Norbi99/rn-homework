@@ -1,15 +1,23 @@
 import React, { useEffect, useState } from 'react';
 import {View, Text, StyleSheet, Image, ActivityIndicator, Alert} from 'react-native';
 import {SafeAreaView} from "react-native-safe-area-context";
+import {useNavigation} from '@react-navigation/native';
+import type {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import type { ProfileStackParamList } from '../navigation/ProfileStackNavigator';
+
 import Colors from '../constants/colors';
 import { fetchProfile } from '../mock/user';
 import type { UserProfile } from '../mock/user';
 import Button from '../components/Button';
 
+
+
 const ProfileScreen = () => {
     const [profile, setProfile] = useState<UserProfile | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
+
+    const navigation = useNavigation<NativeStackNavigationProp<ProfileStackParamList>>();
 
     const loadProfile = async () => {
         try {
@@ -29,7 +37,7 @@ const ProfileScreen = () => {
     }, []);
 
     const handleEdit = () => {
-        Alert.alert('Edit button pressed'); //todo navigation to editmode
+       navigation.navigate('ProfileEdit')
     };
 
     if (loading) {

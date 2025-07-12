@@ -4,7 +4,7 @@ import {Ionicons} from '@expo/vector-icons';
 import {StyleSheet, View} from 'react-native';
 
 import HomeScreen from '../screens/HomeScreen';
-import ProfileScreen from '../screens/ProfileScreen';
+import ProfileStackNavigator from './ProfileStackNavigator';
 import SettingsScreen from '../screens/SettingsScreen';
 import NotificationScreen from '../screens/NotificationScreen';
 import Colors from "../constants/colors";
@@ -57,7 +57,7 @@ const BottomTabNavigator = () => {
             })}
         >
             <Tab.Screen name="Home" component={HomeScreen}/>
-            <Tab.Screen name="Profile" component={ProfileScreen}/>
+            <Tab.Screen name="Profile" component={ProfileStackNavigator}/>
             <Tab.Screen name="Settings" component={SettingsScreen}/>
             <Tab.Screen name="Notifications" component={NotificationScreen}/>
         </Tab.Navigator>
