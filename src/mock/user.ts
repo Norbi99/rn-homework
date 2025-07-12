@@ -57,7 +57,7 @@ export const uploadProfilePicture = async (
         progress += 10;
         onProgress?.(progress);
     }
-    
+
     mockUser.profilePicture = uri;
     return uri;
 };
