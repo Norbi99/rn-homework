@@ -20,3 +20,42 @@ You can try the app instantly on your phone using the **Expo Go** app.
 ![qr-code](assets/qr-code.svg)
 
 ---
+
+## 🛠️ Setup Instructions
+
+If you'd like to run the project locally:
+
+1. Clone the repository:
+
+```
+git clone https://github.com/Norbi99/rn-homework.git
+cd rn-homework
+```
+
+2. Install dependencies:
+   Using Yarn:
+```
+yarn install
+```
+   Or using npm:
+```
+npm install
+```
+3. Start the Expo development server:
+```
+npx expo start
+```
+
+4. Open the app using the Expo Go mobile app (scan the new QR code that appears in terminal or browser).
+
+
+
+
+
+
+
+
+
+
+
+
