@@ -5,6 +5,7 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
 import { fetchProfile, UserProfile } from '../mock/user';
 import Colors from '../constants/colors';
+import Button from '../components/Button';
 
 type RootStackParamList = {
     Profile: undefined;
@@ -50,10 +51,11 @@ const HomeScreen = () => {
                 <View style={[styles.progressBar, { width: '80%' }]} />
             </View>
             <Text style={styles.progressLabel}>Profile completion: 80%</Text>
+            <Button
+                title="Go to your profile!"
+                onPress={() => navigation.navigate('Profile')}
+            />
 
-            <TouchableOpacity onPress={() => navigation.navigate('Profile')}>
-                <Text style={styles.link}>Edit your profile</Text>
-            </TouchableOpacity>
         </View>
     );
 };
@@ -91,11 +93,6 @@ const styles = StyleSheet.create({
     cardText: {
         fontSize: 16,
         color: Colors.text,
-    },
-    link: {
-        fontSize: 16,
-        color: Colors.accent,
-        textDecorationLine: 'underline',
     },
     progressContainer: {
         width: '100%',
