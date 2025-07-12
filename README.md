@@ -33,11 +33,7 @@ cd rn-homework
 ```
 
 2. Install dependencies:
-   Using Yarn:
-```
-yarn install
-```
-   Or using npm:
+
 ```
 npm install
 ```
