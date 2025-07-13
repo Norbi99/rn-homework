@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
@@ -43,7 +43,7 @@ const HomeScreen = () => {
     }
 
     return (
-        <View style={styles.container}>
+        <ScrollView style={{flex: 1, backgroundColor: Colors.background,}} contentContainerStyle={styles.container}>
             <Text style={styles.welcome}>Welcome, {user.name}!</Text>
             <Text style={styles.date}>{currentDate}</Text>
 
@@ -56,14 +56,13 @@ const HomeScreen = () => {
                 onPress={() => navigation.navigate('Profile')}
             />
 
-        </View>
+        </ScrollView>
     );
 };
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
-        backgroundColor: Colors.background,
+        flexGrow: 1,
         justifyContent: 'center',
         alignItems: 'center',
         padding: 20,

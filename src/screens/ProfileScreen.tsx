@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import {View, Text, StyleSheet, Image, ActivityIndicator, Alert} from 'react-native';
+import {View, Text, StyleSheet, Image, ActivityIndicator, Alert, ScrollView} from 'react-native';
 import {SafeAreaView} from "react-native-safe-area-context";
 import {useNavigation} from '@react-navigation/native';
 import type {NativeStackNavigationProp} from '@react-navigation/native-stack';
@@ -58,7 +58,8 @@ const ProfileScreen = () => {
     }
 
     return (
-        <SafeAreaView style={styles.container}>
+        <SafeAreaView style={{flex:1,backgroundColor:Colors.background}}>
+            <ScrollView style={{flex:1}} contentContainerStyle={styles.container} keyboardShouldPersistTaps="handled" >
             <Image source={{ uri: profile.profilePicture }} style={styles.avatar} />
             <Text style={styles.name}>{profile.name}</Text>
             <Text style={styles.email}>{profile.email}</Text>
@@ -82,16 +83,15 @@ const ProfileScreen = () => {
             <View style={{ marginTop: 24 }}>
                 <Button title="Edit Profile" onPress={handleEdit} />
             </View>
+            </ScrollView>
         </SafeAreaView>
     );
 };
 
 const styles = StyleSheet.create({
     container: {
-        flex:1,
         padding: 24,
         alignItems: 'center',
-        backgroundColor: Colors.background,
     },
     centered: {
         flex: 1,
