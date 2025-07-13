@@ -1,22 +1,21 @@
 import React, { useState } from 'react';
-import {View, Text, StyleSheet, TextInput,
-    Alert,
-    ScrollView,
-    Image,
-    TouchableOpacity,
-    Platform,
-    KeyboardAvoidingView,
-} from 'react-native';
+import {View, Text, StyleSheet, TextInput, Alert, ScrollView, Image, TouchableOpacity, Platform, KeyboardAvoidingView,} from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { useForm, Controller, SubmitHandler } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useDispatch } from 'react-redux';
+import { setProfile } from '../store/userSlice';
+
 
 import Colors from '../constants/colors';
 import Button from '../components/Button';
 import {updateProfile, UserProfile} from '../mock/user';
+
+import type { AppDispatch } from '../store';
+
 
 type ProfileFormValues = {
     name: string;
@@ -42,6 +41,8 @@ const ProfileEditScreen = () => {
     const route = useRoute();
     const insets = useSafeAreaInsets();
     const { profile } = route.params as { profile: UserProfile };
+    const dispatch = useDispatch<AppDispatch>();
+
 
     const [focusedField, setFocusedField] = useState<string | null>(null);
     const [showDatePicker, setShowDatePicker] = useState(false);
@@ -70,11 +71,15 @@ const ProfileEditScreen = () => {
         try {
             setLoading(true);
             const updated = await updateProfile(data);
-            // TODO: global state management (redux)
-            Alert.alert('Success', 'Profile updated successfully!');
+
+            dispatch(setProfile({
+                ...updated,
+                birthday: updated.birthday.toISOString(), // serialize Date → string
+            }));
+
             navigation.goBack();
-        } catch (err: any) {
-            Alert.alert('Error', err.message || 'Something went wrong');
+        } catch (err) {
+            Alert.alert('Error', 'Failed to save changes');
         } finally {
             setLoading(false);
         }
