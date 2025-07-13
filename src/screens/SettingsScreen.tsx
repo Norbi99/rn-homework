@@ -1,128 +1,102 @@
-import React, { useState } from 'react';
-import {
-    View,
-    Text,
-    StyleSheet,
-    Switch,
-    Alert,
-    SectionList,
-    SafeAreaView,
-} from 'react-native';
+import React, {useState} from 'react';
+import { View, Text, StyleSheet, ScrollView, Alert } from 'react-native';
+import { useSelector, useDispatch } from 'react-redux';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+
 import Colors from '../constants/colors';
 import Button from '../components/Button';
+import { RootState } from '../store';
+import CustomSwitch from '../components/CustomSwitch';
 
 const SettingsScreen = () => {
-    // UI toggle state only (no real functionality yet)
     const [darkMode, setDarkMode] = useState(false);
 
-    const handleLogout = () => {
-        Alert.alert('Logged out', 'You have been logged out successfully.');
+    const insets = useSafeAreaInsets();
+    const dispatch = useDispatch();
+
+    const profile = useSelector((state: RootState) => state.user.profile);
+
+    if (!profile) return null;
+
+    const toggleDarkMode = () => {
+        setDarkMode((prev) => !prev);
     };
 
-    const sections = [
-        {
-            title: 'Preferences',
-            data: [
-                {
-                    key: 'darkMode',
-                    render: () => (
-                        <View style={styles.row}>
-                            <Text style={styles.label}>Dark Mode</Text>
-                            <Switch
-                                value={darkMode}
-                                onValueChange={setDarkMode}
-                            />
-                        </View>
-                    ),
-                },
-            ],
-        },
-        {
-            title: 'About',
-            data: [
-                {
-                    key: 'aboutText',
-                    render: () => (
-                        <View style={styles.textBlock}>
-                            <Text style={styles.aboutText}>
-                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ut
-                                perspiciatis unde omnis iste natus error sit voluptatem.
-                            </Text>
-                        </View>
-                    ),
-                },
-            ],
-        },
-        {
-            title: 'Account',
-            data: [
-                {
-                    key: 'logout',
-                    render: () => (
-                        <View style={styles.logoutButtonWrapper}>
-                            <Button title="Logout" onPress={handleLogout} />
-                        </View>
-                    ),
-                },
-            ],
-        },
-    ];
+    const handleLogout = () => {
+            Alert.alert('Logout', 'You have logged out successfully');
+            //logic could come here
+    };
 
     return (
-        <SafeAreaView style={styles.container}>
-            <SectionList
-                sections={sections}
-                keyExtractor={(item) => item.key}
-                renderItem={({ item }) => item.render()}
-                renderSectionHeader={({ section: { title } }) => (
-                    <Text style={styles.sectionHeader}>{title}</Text>
-                )}
-                contentContainerStyle={styles.listContent}
-            />
-        </SafeAreaView>
+        <ScrollView
+            style={styles.scrollView}
+            contentContainerStyle={[styles.container, { paddingTop: insets.top + 24, paddingBottom: insets.bottom + 24 }]}
+        >
+            <View style={styles.section}>
+                <Text style={styles.sectionTitle}>Preferences</Text>
+                <View style={styles.settingRow}>
+                    <Text style={styles.settingLabel}>Dark Mode</Text>
+                    <CustomSwitch
+                        value={darkMode}
+                        onValueChange={toggleDarkMode}
+                    />
+                </View>
+            </View>
+
+            <View style={styles.section}>
+                <Text style={styles.sectionTitle}>About</Text>
+                <View style={styles.aboutBox}>
+                    <Text style={styles.aboutText}>
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ut perspiciatis unde omnis iste natus error sit voluptatem.
+                    </Text>
+                </View>
+            </View>
+
+            <View style={styles.section}>
+                <Text style={styles.sectionTitle}>Account</Text>
+                <Button title="Logout" onPress={handleLogout} />
+            </View>
+        </ScrollView>
     );
 };
 
 const styles = StyleSheet.create({
-    container: {
+    scrollView: {
         flex: 1,
         backgroundColor: Colors.background,
     },
-    listContent: {
-        padding: 20,
+    container: {
+        paddingHorizontal: 24,
     },
-    sectionHeader: {
-        fontSize: 16,
+    section: {
+        marginBottom: 32,
+    },
+    sectionTitle: {
         fontWeight: 'bold',
+        fontSize: 16,
         color: Colors.mutedText,
-        marginTop: 24,
-        marginBottom: 8,
+        marginBottom: 12,
     },
-    row: {
-        backgroundColor: 'white',
+    settingRow: {
+        backgroundColor: '#fff',
         padding: 16,
         borderRadius: 8,
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-        marginBottom: 12,
     },
-    label: {
+    settingLabel: {
         fontSize: 16,
         color: Colors.text,
     },
-    textBlock: {
-        backgroundColor: 'white',
-        padding: 16,
+    aboutBox: {
+        backgroundColor: '#fff',
         borderRadius: 8,
-        marginBottom: 12,
+        padding: 16,
     },
     aboutText: {
-        fontSize: 14,
         color: Colors.text,
-    },
-    logoutButtonWrapper: {
-        marginTop: 8,
+        fontSize: 14,
     },
 });
 

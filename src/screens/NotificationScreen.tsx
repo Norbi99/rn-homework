@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
-import {View, Text, StyleSheet, Switch, Alert, ActivityIndicator} from 'react-native';
+import {View, Text, StyleSheet, Alert, ActivityIndicator} from 'react-native';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../store';
 import { setProfile } from '../store/userSlice';
 import { updateProfile } from '../mock/user';
 import Colors from '../constants/colors';
+import CustomSwitch from '../components/CustomSwitch';
 
 const NotificationScreen = () => {
     const dispatch = useDispatch();
@@ -50,7 +51,7 @@ const NotificationScreen = () => {
         <View style={styles.container}>
             <View style={styles.settingRow}>
                 <Text style={styles.label}>Email Notifications</Text>
-                <Switch
+                <CustomSwitch
                     value={profile.preferences.emailNotifications}
                     onValueChange={(value) => handleToggle('emailNotifications', value)}
                     disabled={loading}
@@ -59,7 +60,7 @@ const NotificationScreen = () => {
 
             <View style={styles.settingRow}>
                 <Text style={styles.label}>Push Notifications</Text>
-                <Switch
+                <CustomSwitch
                     value={profile.preferences.pushNotifications}
                     onValueChange={(value) => handleToggle('pushNotifications', value)}
                     disabled={loading}
