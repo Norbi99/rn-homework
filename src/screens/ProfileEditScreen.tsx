@@ -1,37 +1,26 @@
+// External libraries
 import React, { useState, useEffect } from 'react';
-import {
-    View,
-    Text,
-    StyleSheet,
-    TextInput,
-    Alert,
-    ScrollView,
-    Image,
-    TouchableOpacity,
-    Platform,
-    KeyboardAvoidingView,
-    ActivityIndicator,
-} from 'react-native';
-import DateTimePicker from '@react-native-community/datetimepicker';
+import {View, Text, StyleSheet, TextInput, Alert, ScrollView, Image, TouchableOpacity, Platform, KeyboardAvoidingView, ActivityIndicator} from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { usePreventRemove } from '@react-navigation/native';
+import DateTimePicker from '@react-native-community/datetimepicker';
+import * as ImagePicker from 'expo-image-picker';
 import { useForm, Controller, SubmitHandler } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
-import * as ImagePicker from 'expo-image-picker';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useDispatch, useSelector } from 'react-redux';
 
+// App-specific imports
 import Colors from '../constants/colors';
 import Button from '../components/Button';
 import { updateProfile, uploadProfilePicture } from '../mock/user';
 import { RootState, AppDispatch } from '../store';
 import { setProfile } from '../store/userSlice';
-import {showError, showSuccess} from "../utils/toast";
+import { showError, showSuccess } from '../utils/toast';
 
-/**
- * Schema validation for the profile form
- */
+
+// Schema validation for the profile form
 const schema = yup.object({
     name: yup
         .string()
@@ -44,10 +33,12 @@ const schema = yup.object({
     birthday: yup.date().required(),
 });
 
-/**
- * Profile Edit Screen
- */
+
+// Main component
 const ProfileEditScreen = () => {
+    /**
+     * Redux + Navigation + Layout setup
+     */
     const profile = useSelector((state: RootState) => state.user.profile);
     const dispatch = useDispatch<AppDispatch>();
     const navigation = useNavigation();
@@ -56,28 +47,27 @@ const ProfileEditScreen = () => {
     /**
      * Prevent usage before profile is loaded
      */
-
     if (!profile) {
         return (
-            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-                <ActivityIndicator size="large" />
+            <View style={styles.centered}>
+                <ActivityIndicator size="large" color={Colors.accent} />
             </View>
         );
     }
 
     /**
-     * Local UI state
+     * Local state
      */
     const [focusedField, setFocusedField] = useState<string | null>(null);
     const [showDatePicker, setShowDatePicker] = useState(false);
     const [tempDate, setTempDate] = useState<Date>(new Date(profile.birthday));
     const [loading, setLoading] = useState(false);
-    const [skipUnsavedWarning, setSkipUnsavedWarning] = useState(false);
     const [uploading, setUploading] = useState(false);
     const [uploadProgress, setUploadProgress] = useState(0);
+    const [skipUnsavedWarning, setSkipUnsavedWarning] = useState(false);
 
     /**
-     * Form hook
+     * React Hook Form setup
      */
     const {
         control,
@@ -98,7 +88,7 @@ const ProfileEditScreen = () => {
     const bioValue = watch('bio') ?? '';
 
     /**
-     * Confirm before navigation if there are unsaved changes
+     * Prevent navigation away when form is dirty
      */
     usePreventRemove(isDirty && !skipUnsavedWarning, (e) => {
         Alert.alert(
@@ -116,7 +106,7 @@ const ProfileEditScreen = () => {
     });
 
     /**
-     * Media permissions
+     * Request media library permission
      */
     useEffect(() => {
         (async () => {
@@ -128,7 +118,7 @@ const ProfileEditScreen = () => {
     }, []);
 
     /**
-     * Profile picture upload handler
+     * Handle profile picture change
      */
     const handleChangePhoto = async () => {
         const result = await ImagePicker.launchImageLibraryAsync({
@@ -153,14 +143,14 @@ const ProfileEditScreen = () => {
             }));
             showSuccess('Uploaded', 'Your profile picture has been uploaded successfully.');
         } catch {
-            showError('Upload Failed', 'Could not upload your profile picture.')
+            showError('Upload Failed', 'Could not upload your profile picture.');
         } finally {
             setUploading(false);
         }
     };
 
     /**
-     * Submit handler
+     * Handle form submission
      */
     const onSubmit: SubmitHandler<any> = async (data) => {
         try {
@@ -173,31 +163,30 @@ const ProfileEditScreen = () => {
                 birthday: updated.birthday.toISOString(),
             }));
             navigation.goBack();
+            showSuccess('Profile Updated', 'Your profile has been updated successfully.');
         } catch {
             showError('Save Failed', 'Could not save your changes. Please try again.');
-
         } finally {
             setLoading(false);
             setSkipUnsavedWarning(false);
-            showSuccess('Profile Updated', 'Your profile has been updated successfully.');
         }
     };
 
     /**
-     * UI Rendering
+     * UI rendering
      */
     return (
         <View style={{ flex: 1 }}>
             <KeyboardAvoidingView
                 behavior={Platform.OS === 'ios' ? 'padding' : undefined}
                 style={{ flex: 1 }}
-                keyboardVerticalOffset={Platform.OS === 'ios' ? 100 : 0}>
-
+                keyboardVerticalOffset={Platform.OS === 'ios' ? 100 : 0}
+            >
                 <ScrollView
                     style={{ flex: 1 }}
                     contentContainerStyle={[styles.container, { paddingBottom: insets.bottom + 100 }]}
-                    keyboardShouldPersistTaps="handled">
-
+                    keyboardShouldPersistTaps="handled"
+                >
                     {/* Avatar */}
                     <View style={styles.avatarWrapper}>
                         <View style={styles.avatarContainer}>
@@ -210,7 +199,7 @@ const ProfileEditScreen = () => {
                         </View>
                     </View>
 
-                    {/* Name Field */}
+                    {/* Name */}
                     <View style={styles.inputGroup}>
                         <Text style={styles.label}>Name</Text>
                         <Controller
@@ -233,7 +222,7 @@ const ProfileEditScreen = () => {
                         {errors.name && <Text style={styles.error}>{errors.name.message}</Text>}
                     </View>
 
-                    {/* Email Field */}
+                    {/* Email */}
                     <View style={styles.inputGroup}>
                         <Text style={styles.label}>Email</Text>
                         <Controller
@@ -258,7 +247,7 @@ const ProfileEditScreen = () => {
                         {errors.email && <Text style={styles.error}>{errors.email.message}</Text>}
                     </View>
 
-                    {/* Bio Field */}
+                    {/* Bio */}
                     <View style={styles.inputGroup}>
                         <Text style={styles.label}>Bio</Text>
                         <Controller
@@ -430,6 +419,12 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         marginTop: 24,
+    },
+    centered: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: Colors.background,
     },
 });
 

@@ -1,49 +1,63 @@
-import React, {useState} from 'react';
-import { View, Text, StyleSheet, ScrollView, Alert } from 'react-native';
-import { useSelector, useDispatch } from 'react-redux';
+import React, { useState } from 'react';
+import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useSelector, useDispatch } from 'react-redux';
 
+import { RootState } from '../store';
 import Colors from '../constants/colors';
 import Button from '../components/Button';
-import { RootState } from '../store';
 import CustomSwitch from '../components/CustomSwitch';
-import {showSuccess} from "../utils/toast";
+import { showSuccess } from '../utils/toast';
 
+/**
+ * Settings Screen
+ */
 const SettingsScreen = () => {
+    // Local state for dark mode toggle (currently UI-only)
     const [darkMode, setDarkMode] = useState(false);
 
+    // Safe area insets for spacing
     const insets = useSafeAreaInsets();
-    const dispatch = useDispatch();
 
+    // Redux
+    const dispatch = useDispatch();
     const profile = useSelector((state: RootState) => state.user.profile);
 
+    // Exit early if profile not available
     if (!profile) return null;
 
+    // Toggle for dark mode (no theme implementation)
     const toggleDarkMode = () => {
-        setDarkMode((prev) => !prev);
+        setDarkMode(prev => !prev);
     };
 
+    // Handle logout action (placeholder only)
     const handleLogout = () => {
-            showSuccess('Logged Out', 'You have been logged out successfully.');
-            //todo logic could come here
+        showSuccess('Logged Out', 'You have been logged out successfully.');
+        // TODO: Add actual logout logic
     };
 
     return (
         <ScrollView
             style={styles.scrollView}
-            contentContainerStyle={[styles.container, { paddingTop: insets.top + 24, paddingBottom: insets.bottom + 24 }]}
+            contentContainerStyle={[
+                styles.container,
+                {
+                    paddingTop: insets.top + 24,
+                    paddingBottom: insets.bottom + 24,
+                },
+            ]}
         >
+            {/* Preferences Section */}
             <View style={styles.section}>
                 <Text style={styles.sectionTitle}>Preferences</Text>
                 <View style={styles.settingRow}>
                     <Text style={styles.settingLabel}>Dark Mode</Text>
-                    <CustomSwitch
-                        value={darkMode}
-                        onValueChange={toggleDarkMode}
-                    />
+                    <CustomSwitch value={darkMode} onValueChange={toggleDarkMode} />
                 </View>
             </View>
 
+            {/* About Section */}
             <View style={styles.section}>
                 <Text style={styles.sectionTitle}>About</Text>
                 <View style={styles.aboutBox}>
@@ -53,6 +67,7 @@ const SettingsScreen = () => {
                 </View>
             </View>
 
+            {/* Account Section */}
             <View style={styles.section}>
                 <Text style={styles.sectionTitle}>Account</Text>
                 <Button title="Logout" onPress={handleLogout} />
