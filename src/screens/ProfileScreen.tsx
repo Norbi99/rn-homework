@@ -1,27 +1,40 @@
 import React from 'react';
-import {View, Text, StyleSheet, Image, ScrollView, ActivityIndicator} from 'react-native';
+import { View, Text, StyleSheet, Image, ScrollView, ActivityIndicator } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useNavigation} from '@react-navigation/native';
-import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { useNavigation } from '@react-navigation/native';
 import { useSelector } from 'react-redux';
+import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
 import type { RootState } from '../store';
 import type { ProfileStackParamList } from '../navigation/ProfileStackNavigator';
 
 import Colors from '../constants/colors';
 import Button from '../components/Button';
+import Card from '../components/Card';
 
 const ProfileScreen = () => {
+    /**
+     * Navigation setup
+     */
     const navigation = useNavigation<NativeStackNavigationProp<ProfileStackParamList>>();
+
+    /**
+     * Select user profile from Redux
+     */
     const profile = useSelector((state: RootState) => state.user.profile);
 
-
+    /**
+     * Navigate to ProfileEdit screen
+     */
     const handleEdit = () => {
         if (profile) {
             navigation.navigate('ProfileEdit');
         }
     };
 
+    /**
+     * Show loading indicator while profile is not available
+     */
     if (!profile) {
         return (
             <View style={styles.centered}>
@@ -30,6 +43,9 @@ const ProfileScreen = () => {
         );
     }
 
+    /**
+     * Main screen UI
+     */
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: Colors.background }}>
             <ScrollView
@@ -37,29 +53,35 @@ const ProfileScreen = () => {
                 contentContainerStyle={styles.container}
                 keyboardShouldPersistTaps="handled"
             >
-                <Image source={{ uri: profile.profilePicture || 'https://i.pravatar.cc/150?img=12'}} style={styles.avatar} />
-                <Text style={styles.name}>{profile.name}</Text>
-                <Text style={styles.email}>{profile.email}</Text>
+                <Card style={styles.card}>
+                    <Image
+                        source={{ uri: profile.profilePicture || 'https://i.pravatar.cc/150?img=12' }}
+                        style={styles.avatar}
+                    />
 
-                <View style={styles.fieldGroup}>
-                    <Text style={styles.label}>Bio:</Text>
-                    <Text style={styles.value}>{profile.bio}</Text>
-                </View>
+                    <Text style={styles.name}>{profile.name}</Text>
+                    <Text style={styles.email}>{profile.email}</Text>
 
-                <View style={styles.fieldGroup}>
-                    <Text style={styles.label}>Birthday:</Text>
-                    <Text style={styles.value}>
-                        {profile?.birthday ? new Date(profile.birthday).toLocaleDateString(undefined, {
-                            year: 'numeric',
-                            month: 'long',
-                            day: 'numeric',
-                        }): 'N/A'}
-                    </Text>
-                </View>
+                    <View style={styles.fieldGroup}>
+                        <Text style={styles.label}>Bio:</Text>
+                        <Text style={styles.value}>{profile.bio}</Text>
+                    </View>
 
-                <View style={{ marginTop: 24 }}>
-                    <Button title="Edit your profile!" onPress={handleEdit} />
-                </View>
+                    <View style={styles.fieldGroup}>
+                        <Text style={styles.label}>Birthday:</Text>
+                        <Text style={styles.value}>
+                            {profile.birthday
+                                ? new Date(profile.birthday).toLocaleDateString(undefined, {
+                                    year: 'numeric',
+                                    month: 'long',
+                                    day: 'numeric',
+                                })
+                                : 'N/A'}
+                        </Text>
+                    </View>
+
+                    <Button title="Edit your profile!" onPress={handleEdit} style={{ marginTop: 24 }} />
+                </Card>
             </ScrollView>
         </SafeAreaView>
     );
@@ -75,6 +97,10 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: Colors.background,
+    },
+    card: {
+        width: '100%',
+        alignItems: 'center',
     },
     avatar: {
         width: 150,
@@ -103,11 +129,6 @@ const styles = StyleSheet.create({
     },
     value: {
         color: Colors.mutedText,
-    },
-    error: {
-        color: 'red',
-        fontSize: 16,
-        marginBottom: 16,
     },
 });
 
