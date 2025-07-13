@@ -3,6 +3,8 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import ProfileScreen from '../screens/ProfileScreen';
 import ProfileEditScreen from '../screens/ProfileEditScreen';
 
+import Colors from '../constants/colors';
+
 export type ProfileStackParamList = {
     ProfileView: undefined;
     ProfileEdit: undefined;
@@ -12,7 +14,17 @@ const Stack = createNativeStackNavigator<ProfileStackParamList>();
 
 const ProfileStackNavigator = () => {
     return (
-        <Stack.Navigator>
+        <Stack.Navigator screenOptions={{
+            headerBackTitle: 'Back',
+            headerStyle: {
+                backgroundColor: Colors.card,
+            },
+            headerTintColor: Colors.text,
+            headerTitleStyle: {
+                fontWeight: 'bold',
+                color: Colors.text,
+            },
+        }}>
             <Stack.Screen
                 name="ProfileView"
                 component={ProfileScreen}
