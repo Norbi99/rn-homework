@@ -1,9 +1,5 @@
 import React, { useState } from 'react';
-import {
-    View,
-    Text,
-    StyleSheet,
-    TextInput,
+import {View, Text, StyleSheet, TextInput,
     Alert,
     ScrollView,
     Image,
@@ -20,7 +16,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import Colors from '../constants/colors';
 import Button from '../components/Button';
-import type { UserProfile } from '../mock/user';
+import {updateProfile, UserProfile} from '../mock/user';
 
 type ProfileFormValues = {
     name: string;
@@ -50,6 +46,7 @@ const ProfileEditScreen = () => {
     const [focusedField, setFocusedField] = useState<string | null>(null);
     const [showDatePicker, setShowDatePicker] = useState(false);
     const [tempDate, setTempDate] = useState<Date>(new Date(profile.birthday));
+    const [loading, setLoading] = useState(false);
 
     const {
         control,
@@ -69,9 +66,18 @@ const ProfileEditScreen = () => {
 
     const bioValue = watch('bio') ?? '';
 
-    const onSubmit: SubmitHandler<ProfileFormValues> = (data) => {
-        console.log('Form data:', data);
-        Alert.alert('Submitted!', JSON.stringify(data, null, 2));
+    const onSubmit: SubmitHandler<ProfileFormValues> = async (data) => {
+        try {
+            setLoading(true);
+            const updated = await updateProfile(data);
+            // TODO: global state management (redux)
+            Alert.alert('Success', 'Profile updated successfully!');
+            navigation.goBack();
+        } catch (err: any) {
+            Alert.alert('Error', err.message || 'Something went wrong');
+        } finally {
+            setLoading(false);
+        }
     };
 
     return (
