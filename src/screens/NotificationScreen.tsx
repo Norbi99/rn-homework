@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import {View, Text, StyleSheet, Alert, ActivityIndicator} from 'react-native';
+import {View, Text, StyleSheet, ActivityIndicator} from 'react-native';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../store';
@@ -7,6 +7,7 @@ import { setProfile } from '../store/userSlice';
 import { updateProfile } from '../mock/user';
 import Colors from '../constants/colors';
 import CustomSwitch from '../components/CustomSwitch';
+import {showError, showSuccess} from "../utils/toast";
 
 const NotificationScreen = () => {
     const dispatch = useDispatch();
@@ -40,15 +41,21 @@ const NotificationScreen = () => {
                 preferences: updated.preferences,
             }));
         } catch (err) {
-            Alert.alert('Error', 'Failed to update preferences');
+            showError('Update Failed', 'Could not save your preferences.');
         } finally {
             setLoading(false);
+            showSuccess('Preferences Updated', 'Your settings have been saved.');
         }
     };
 
     return (
         <SafeAreaView style={{flex:1}}>
         <View style={styles.container}>
+            {loading && (
+                <View style={{ alignItems: 'flex-end', marginBottom: 8 }}>
+                    <ActivityIndicator size="small" color={Colors.accent} />
+                </View>
+            )}
             <View style={styles.settingRow}>
                 <Text style={styles.label}>Email Notifications</Text>
                 <CustomSwitch

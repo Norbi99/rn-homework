@@ -1,6 +1,8 @@
 import React from 'react';
 import {TouchableOpacity, Text, StyleSheet, GestureResponderEvent, ViewStyle, TextStyle,} from 'react-native';
 import Colors from '../constants/colors';
+import { ActivityIndicator } from 'react-native';
+
 
 type ButtonProps = {
     title: string;
@@ -9,33 +11,40 @@ type ButtonProps = {
     disabled?: boolean;
     style?: ViewStyle;
     textStyle?: TextStyle;
+    loading?: boolean;
 };
 
-const Button: React.FC<ButtonProps> = ({title, onPress, variant = 'primary', disabled = false, style, textStyle}) => {
+const Button: React.FC<ButtonProps> = ({title, onPress, variant = 'primary', disabled = false, style, textStyle, loading = false}) => {
     const isPrimary = (variant === 'primary');
 
     return (
         <TouchableOpacity
             onPress={onPress}
-            disabled={disabled}
+            disabled={disabled || loading}
             style={[
                 styles.base,
                 isPrimary ? styles.primary : styles.secondary,
-                disabled && styles.disabled,
+                (disabled || loading) && styles.disabled,
                 style,
             ]}
         >
-            <Text style={[
-                    styles.textBase,
-                    isPrimary ? styles.primaryText : styles.secondaryText,
-                    disabled && styles.disabledText,
-                    textStyle,
-                ]}
-            >
-                {title}
-            </Text>
+            {loading ? (
+                <ActivityIndicator size="small" color={isPrimary ? Colors.text : Colors.mutedText} />
+            ) : (
+                <Text
+                    style={[
+                        styles.textBase,
+                        isPrimary ? styles.primaryText : styles.secondaryText,
+                        disabled && styles.disabledText,
+                        textStyle,
+                    ]}
+                >
+                    {title}
+                </Text>
+            )}
         </TouchableOpacity>
     );
+
 };
 
 const styles = StyleSheet.create({

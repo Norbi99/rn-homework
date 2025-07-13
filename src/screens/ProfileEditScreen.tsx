@@ -328,7 +328,7 @@ const ProfileEditScreen = () => {
                     {/* Buttons */}
                     <View style={styles.buttonRow}>
                         <Button title="Cancel" onPress={() => navigation.goBack()} style={{ flex: 1, marginRight: 8 }} />
-                        <Button title="Save" onPress={handleSubmit(onSubmit)} disabled={!isDirty || !isValid} style={{ flex: 1 }} />
+                        <Button title="Save" onPress={handleSubmit(onSubmit)} disabled={!isDirty || !isValid} style={{ flex: 1 }} loading={loading} />
                     </View>
                 </ScrollView>
             </KeyboardAvoidingView>

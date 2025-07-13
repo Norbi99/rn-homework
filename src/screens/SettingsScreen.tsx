@@ -7,6 +7,7 @@ import Colors from '../constants/colors';
 import Button from '../components/Button';
 import { RootState } from '../store';
 import CustomSwitch from '../components/CustomSwitch';
+import {showSuccess} from "../utils/toast";
 
 const SettingsScreen = () => {
     const [darkMode, setDarkMode] = useState(false);
@@ -23,8 +24,8 @@ const SettingsScreen = () => {
     };
 
     const handleLogout = () => {
-            Alert.alert('Logout', 'You have logged out successfully');
-            //logic could come here
+            showSuccess('Logged Out', 'You have been logged out successfully.');
+            //todo logic could come here
     };
 
     return (

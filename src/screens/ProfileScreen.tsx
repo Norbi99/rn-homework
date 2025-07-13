@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, Image, ScrollView } from 'react-native';
+import {View, Text, StyleSheet, Image, ScrollView, ActivityIndicator} from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation} from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
@@ -25,7 +25,7 @@ const ProfileScreen = () => {
     if (!profile) {
         return (
             <View style={styles.centered}>
-                <Text style={styles.error}>No profile data.</Text>
+                <ActivityIndicator size="large" color={Colors.accent} />
             </View>
         );
     }

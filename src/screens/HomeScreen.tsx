@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, ScrollView } from 'react-native';
+import {View, Text, StyleSheet, ScrollView, ActivityIndicator} from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useSelector } from 'react-redux';
@@ -36,7 +36,7 @@ const HomeScreen = () => {
     if (!profile) {
         return (
             <View style={styles.container}>
-                <Text style={styles.text}>Loading...</Text>
+                <ActivityIndicator size="large" color={Colors.accent} />
             </View>
         );
     }
