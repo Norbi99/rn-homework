@@ -34,7 +34,7 @@ const ProfileStackNavigator = () => {
             <Stack.Screen
                 name="ProfileEdit"
                 component={ProfileEditScreen}
-                options={{ title: 'Edit Profile'}}
+                options={{ title: 'Edit Profile', headerBackButtonMenuEnabled: false}}
 
             />
         </Stack.Navigator>

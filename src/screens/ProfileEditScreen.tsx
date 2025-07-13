@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
-import {View, Text, StyleSheet, TextInput, Alert, ScrollView, Image, TouchableOpacity, Platform, KeyboardAvoidingView,} from 'react-native';
+import React, { useState} from 'react';
+import {View, Text, StyleSheet, TextInput, Alert, ScrollView, Image, TouchableOpacity, Platform, KeyboardAvoidingView} from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { useNavigation, useRoute } from '@react-navigation/native';
+import { usePreventRemove } from '@react-navigation/native';
 import { useForm, Controller, SubmitHandler } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
@@ -36,6 +37,7 @@ const schema: yup.ObjectSchema<ProfileFormValues> = yup.object({
     birthday: yup.date().required(),
 });
 
+
 const ProfileEditScreen = () => {
     const navigation = useNavigation();
     const route = useRoute();
@@ -48,13 +50,10 @@ const ProfileEditScreen = () => {
     const [showDatePicker, setShowDatePicker] = useState(false);
     const [tempDate, setTempDate] = useState<Date>(new Date(profile.birthday));
     const [loading, setLoading] = useState(false);
+    const [skipUnsavedWarning, setSkipUnsavedWarning] = useState(false);
 
-    const {
-        control,
-        handleSubmit,
-        watch,
-        formState: { errors, isValid, isDirty },
-    } = useForm<ProfileFormValues>({
+
+    const {control, handleSubmit, watch, formState: { errors, isValid, isDirty }} = useForm<ProfileFormValues>({
         defaultValues: {
             name: profile.name,
             email: profile.email,
@@ -65,10 +64,30 @@ const ProfileEditScreen = () => {
         mode: 'onChange',
     });
 
+    usePreventRemove(isDirty && !skipUnsavedWarning, (e) => {
+        Alert.alert(
+            'Discard changes?',
+            'You have unsaved changes. Are you sure you want to leave?',
+            [
+                { text: 'Stay', style: 'cancel' },
+                {
+                    text: 'Discard',
+                    style: 'destructive',
+                    onPress: () => {
+                        navigation.dispatch(e.data.action); // if confirmed
+                    },
+                },
+            ]
+        );
+    });
+
+
+
     const bioValue = watch('bio') ?? '';
 
     const onSubmit: SubmitHandler<ProfileFormValues> = async (data) => {
         try {
+            setSkipUnsavedWarning(true);
             setLoading(true);
             const updated = await updateProfile(data);
 
@@ -82,6 +101,7 @@ const ProfileEditScreen = () => {
             Alert.alert('Error', 'Failed to save changes');
         } finally {
             setLoading(false);
+            setSkipUnsavedWarning(false);
         }
     };
 
@@ -237,9 +257,12 @@ const ProfileEditScreen = () => {
                         <View style={styles.buttonRow}>
                             <Button
                                 title="Cancel"
-                                onPress={() => navigation.goBack()}
+                                onPress={() => {
+                                    navigation.dispatch({type: 'GO_BACK'})
+                                }}
                                 style={{ flex: 1, marginRight: 8 }}
                             />
+
                             <Button
                                 title="Save"
                                 onPress={handleSubmit(onSubmit)}
