@@ -15,7 +15,7 @@ You can try the app instantly on your phone using the **Expo Go** app.
 
 2. Open this link on your phone (or scan the QR code below):
 
-🔗 [Launch App in Expo Go](https://expo.dev/preview/update?message=Initial+commit%0A%0AGenerated+by+create-expo-app+3.4.2.&updateRuntimeVersion=1.0.0&createdAt=2025-07-12T05%3A50%3A05.571Z&slug=exp&projectId=fd2503fb-f76a-41e7-abc6-bf56ca12b792&group=23533f0d-bbbb-405e-848e-a2dbf32e9e25)
+🔗 [Launch App in Expo Go](https://expo.dev/preview/update?message=homework-current&updateRuntimeVersion=1.0.0&createdAt=2025-07-13T17%3A30%3A31.229Z&slug=exp&projectId=fd2503fb-f76a-41e7-abc6-bf56ca12b792&group=0f7b2531-6db2-4dac-a8e4-9fedd65729c6)
 
 ![qr-code](assets/qr-code.svg)
 
