@@ -111,7 +111,7 @@ const ProfileEditScreen = () => {
                 name="bio"
                 render={({ field: { onChange, onBlur, value } }) => (
                     <TextInput
-                        style={[styles.input, { height: 80 }, focusedField === 'bio' && styles.inputFocused]}
+                        style={[styles.input, { height: 80, textAlignVertical: 'top' }, focusedField === 'bio' && styles.inputFocused]}
                         placeholder="Bio"
                         multiline
                         maxLength={200}
