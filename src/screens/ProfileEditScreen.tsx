@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {View, Text, StyleSheet, TextInput, Alert, ScrollView, Image, TouchableOpacity,} from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { useForm, Controller, SubmitHandler } from 'react-hook-form';
@@ -30,6 +30,7 @@ const schema: yup.ObjectSchema<ProfileFormValues> = yup.object({
 });
 
 const ProfileEditScreen = () => {
+    const [focusedField, setFocusedField] = useState<string | null>(null);
     const navigation = useNavigation();
     const route = useRoute();
     const { profile } = route.params as { profile: UserProfile };
@@ -70,9 +71,13 @@ const ProfileEditScreen = () => {
                 name="name"
                 render={({ field: { onChange, onBlur, value } }) => (
                     <TextInput
-                        style={styles.input}
+                        style={[styles.input, focusedField === 'name' && styles.inputFocused]}
                         placeholder="Name"
-                        onBlur={onBlur}
+                        onFocus={()=> setFocusedField('name')}
+                        onBlur={()=>{
+                            setFocusedField(null);
+                            onBlur();
+                        }}
                         onChangeText={onChange}
                         value={value}
                     />
@@ -85,11 +90,15 @@ const ProfileEditScreen = () => {
                 name="email"
                 render={({ field: { onChange, onBlur, value } }) => (
                     <TextInput
-                        style={styles.input}
+                        style={[styles.input, focusedField === 'email' && styles.inputFocused]}
                         placeholder="Email"
                         keyboardType="email-address"
                         autoCapitalize="none"
-                        onBlur={onBlur}
+                        onFocus={()=> setFocusedField('email')}
+                        onBlur={()=>{
+                            setFocusedField(null);
+                            onBlur();
+                        }}
                         onChangeText={onChange}
                         value={value}
                     />
@@ -102,11 +111,15 @@ const ProfileEditScreen = () => {
                 name="bio"
                 render={({ field: { onChange, onBlur, value } }) => (
                     <TextInput
-                        style={[styles.input, { height: 80 }]}
+                        style={[styles.input, { height: 80 }, focusedField === 'bio' && styles.inputFocused]}
                         placeholder="Bio"
                         multiline
                         maxLength={200}
-                        onBlur={onBlur}
+                        onFocus={()=> setFocusedField('bio')}
+                        onBlur={()=>{
+                            setFocusedField(null);
+                            onBlur();
+                        }}
                         onChangeText={onChange}
                         value={value}
                     />
@@ -197,6 +210,15 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         marginTop: 24,
     },
+    inputFocused: {
+        borderColor: Colors.accent,
+        shadowColor: Colors.accent,
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.2,
+        shadowRadius: 4,
+        elevation: 3,
+    },
+
 });
 
 export default ProfileEditScreen;
