@@ -4,10 +4,11 @@ import ProfileScreen from '../screens/ProfileScreen';
 import ProfileEditScreen from '../screens/ProfileEditScreen';
 
 import Colors from '../constants/colors';
+import {UserProfile} from "../mock/user";
 
 export type ProfileStackParamList = {
     ProfileView: undefined;
-    ProfileEdit: undefined;
+    ProfileEdit: {profile: UserProfile};
 };
 
 const Stack = createNativeStackNavigator<ProfileStackParamList>();
@@ -33,7 +34,8 @@ const ProfileStackNavigator = () => {
             <Stack.Screen
                 name="ProfileEdit"
                 component={ProfileEditScreen}
-                options={{ title: 'Edit Profile' }}
+                options={{ title: 'Edit Profile'}}
+
             />
         </Stack.Navigator>
     );

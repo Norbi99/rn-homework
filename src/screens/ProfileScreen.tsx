@@ -37,7 +37,9 @@ const ProfileScreen = () => {
     }, []);
 
     const handleEdit = () => {
-       navigation.navigate('ProfileEdit')
+        if(profile){
+            navigation.navigate('ProfileEdit', {profile})
+        }
     };
 
     if (loading) {
