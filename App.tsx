@@ -6,6 +6,7 @@ import BottomTabNavigator from './src/navigation/BottomTabNavigator';
 import LoadProfileWrapper from "./src/wrappers/LoadProfileWrapper";
 import { store } from './src/store';
 import {usePushPermissionRequest} from "./src/hooks/usePushPermissionRequest";
+import Toast from 'react-native-toast-message';
 
 
 export default function App() {
@@ -15,6 +16,7 @@ export default function App() {
             <NavigationContainer>
                 <LoadProfileWrapper>
                     <BottomTabNavigator />
+                    <Toast topOffset={60}/>
                 </LoadProfileWrapper>
             </NavigationContainer>
         </Provider>

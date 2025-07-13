@@ -27,6 +27,7 @@ import Button from '../components/Button';
 import { updateProfile, uploadProfilePicture } from '../mock/user';
 import { RootState, AppDispatch } from '../store';
 import { setProfile } from '../store/userSlice';
+import {showError, showSuccess} from "../utils/toast";
 
 /**
  * Schema validation for the profile form
@@ -121,7 +122,7 @@ const ProfileEditScreen = () => {
         (async () => {
             const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
             if (status !== 'granted') {
-                Alert.alert('Permission required', 'Camera roll access is needed to change your profile picture.');
+                showError('Permission Required', 'Media access is needed to change your profile picture.');
             }
         })();
     }, []);
@@ -131,7 +132,7 @@ const ProfileEditScreen = () => {
      */
     const handleChangePhoto = async () => {
         const result = await ImagePicker.launchImageLibraryAsync({
-            mediaTypes: ImagePicker.MediaTypeOptions.Images,
+            mediaTypes: ['images'],
             allowsEditing: true,
             aspect: [1, 1],
             quality: 0.7,
@@ -150,8 +151,9 @@ const ProfileEditScreen = () => {
                 ...profile,
                 profilePicture: uploadedUrl,
             }));
+            showSuccess('Uploaded', 'Your profile picture has been uploaded successfully.');
         } catch {
-            Alert.alert('Error', 'Failed to upload profile picture.');
+            showError('Upload Failed', 'Could not upload your profile picture.')
         } finally {
             setUploading(false);
         }
@@ -172,10 +174,12 @@ const ProfileEditScreen = () => {
             }));
             navigation.goBack();
         } catch {
-            Alert.alert('Error', 'Failed to save changes');
+            showError('Save Failed', 'Could not save your changes. Please try again.');
+
         } finally {
             setLoading(false);
             setSkipUnsavedWarning(false);
+            showSuccess('Profile Updated', 'Your profile has been updated successfully.');
         }
     };
 
