@@ -8,7 +8,7 @@ import {UserProfile} from "../mock/user";
 
 export type ProfileStackParamList = {
     ProfileView: undefined;
-    ProfileEdit: {profile: UserProfile};
+    ProfileEdit: undefined;
 };
 
 const Stack = createNativeStackNavigator<ProfileStackParamList>();

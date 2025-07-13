@@ -13,14 +13,12 @@ import Button from '../components/Button';
 
 const ProfileScreen = () => {
     const navigation = useNavigation<NativeStackNavigationProp<ProfileStackParamList>>();
-    const profile = useSelector((state: RootState) => {
-        const p = state.user.profile;
-        return p ? { ...p, birthday: new Date(p.birthday) } : null;
-    });
+    const profile = useSelector((state: RootState) => state.user.profile);
+
 
     const handleEdit = () => {
         if (profile) {
-            navigation.navigate('ProfileEdit', { profile }); // can be deleted if fetched from redux on the editscreen
+            navigation.navigate('ProfileEdit');
         }
     };
 
@@ -39,7 +37,7 @@ const ProfileScreen = () => {
                 contentContainerStyle={styles.container}
                 keyboardShouldPersistTaps="handled"
             >
-                <Image source={{ uri: profile.profilePicture }} style={styles.avatar} />
+                <Image source={{ uri: profile.profilePicture || 'https://i.pravatar.cc/150?img=12'}} style={styles.avatar} />
                 <Text style={styles.name}>{profile.name}</Text>
                 <Text style={styles.email}>{profile.email}</Text>
 
@@ -51,11 +49,11 @@ const ProfileScreen = () => {
                 <View style={styles.fieldGroup}>
                     <Text style={styles.label}>Birthday:</Text>
                     <Text style={styles.value}>
-                        {profile.birthday.toLocaleDateString(undefined, {
+                        {profile?.birthday ? new Date(profile.birthday).toLocaleDateString(undefined, {
                             year: 'numeric',
                             month: 'long',
                             day: 'numeric',
-                        })}
+                        }): 'N/A'}
                     </Text>
                 </View>
 
