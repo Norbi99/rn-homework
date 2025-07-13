@@ -55,7 +55,7 @@ npx expo start
 - **React Navigation** – stack & bottom tab navigation
 - **Toast Notifications** – via `react-native-toast-message`
 - **Mocked API** – simulates network latency and failures
-- **Custom Components** – Button, Switch, etc. for consistency and reusability
+- **Custom Components** – Button, Switch, Card etc. for consistency and reusability
 
 ---
 
